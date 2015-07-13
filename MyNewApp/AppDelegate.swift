@@ -7,15 +7,33 @@
 //
 
 import UIKit
+import Parse
+import Bolts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var drawerContainer: MMDrawerController?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        Parse.enableLocalDatastore()
+        
+        // Initialize Parse.
+        Parse.setApplicationId("1PKJb02Dx57AnGrfJboVMNCdZwaXx2iq6X1OtMBc",
+            clientKey: "CepQqiRkM4sykIiEAounCLd1KFDjop9kPSYnzvpH")
+        
+        // [Optional] Track statistics around application opens.
+        //PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        
+       
+       buildUserInterface()
+      
+        
         return true
     }
 
@@ -41,6 +59,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    
+    func buildUserInterface()
+    {
+    
+        
+        let userName:String? =  NSUserDefaults.standardUserDefaults().stringForKey("user_name")
+        
+        if(userName != nil)
+        {
+            // Navigate to Protected page
+            let mainStoryBoard:UIStoryboard = UIStoryboard(name:"Main", bundle:nil)
+            
+            // Create View Controllers
+            var mainPage:MainPageViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MainPageViewController") as! MainPageViewController
+            
+            var leftSideMenu:LeftSideViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("LeftSideViewController") as! LeftSideViewController
+            
+            var rightSideMenu:RightSideViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("RightSideViewController") as! RightSideViewController
+           
+            
+            
+            // Wrap into Navigation controllers
+            var mainPageNav = UINavigationController(rootViewController:mainPage)
+            var leftSideMenuNav = UINavigationController(rootViewController:leftSideMenu)
+            var rightSideMenuNav = UINavigationController(rootViewController:rightSideMenu)
+            
+            
+            drawerContainer = MMDrawerController(centerViewController: mainPageNav, leftDrawerViewController: leftSideMenuNav, rightDrawerViewController: rightSideMenuNav)
+            
+            drawerContainer!.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+            drawerContainer!.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
+            
+      
+            window?.rootViewController = drawerContainer
+        }
+        
+        
+
+    
+    }
+    
 
 }
 
