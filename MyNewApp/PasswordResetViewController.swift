@@ -29,7 +29,7 @@ class PasswordResetViewController: UIViewController {
         
         let emailAddress = emailAddressTextField.text
         
-        if emailAddress.isEmpty
+        if emailAddress!.isEmpty
         {
            // Display a warning message
             let userMessage:String = "please type in your email address"
@@ -38,7 +38,7 @@ class PasswordResetViewController: UIViewController {
         }
         
         
-        PFUser.requestPasswordResetForEmailInBackground(emailAddress, block: { (success:Bool, error:NSError?) -> Void in
+        PFUser.requestPasswordResetForEmailInBackground(emailAddress!, block: { (success, error) -> Void in
          
             if(error != nil)
             {
@@ -57,7 +57,8 @@ class PasswordResetViewController: UIViewController {
     
     func displayMessage(userMessage:String)
     {
-       var myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert)
+    
+        let myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert)
         
         let okAction = UIAlertAction(title:"OK", style:UIAlertActionStyle.Default) {
         action in

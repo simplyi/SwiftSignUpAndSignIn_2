@@ -39,7 +39,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     @IBAction func selectProfilePhotoButtonTapped(sender: AnyObject) {
         
-        var myPickerController = UIImagePickerController()
+        let myPickerController = UIImagePickerController()
         myPickerController.delegate = self
         myPickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         
@@ -47,10 +47,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         
     }
-
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject])
-    {
     
+ 
+
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])
+    {
         profilePhotoImageView.image = info[UIImagePickerControllerOriginalImage] as? UIImage
         
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -72,10 +73,10 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         let userFirstName = userFirstNameTextField.text
         let userLastName = userLastNameTextField.text
         
-        if(userName.isEmpty || userPassword.isEmpty || userPasswordRepeat.isEmpty || userFirstName.isEmpty || userLastName.isEmpty)
+        if(userName!.isEmpty || userPassword!.isEmpty || userPasswordRepeat!.isEmpty || userFirstName!.isEmpty || userLastName!.isEmpty)
         {
         
-            var myAlert = UIAlertController(title:"Alert", message:"All fields are required to fill in", preferredStyle:UIAlertControllerStyle.Alert)
+            let myAlert = UIAlertController(title:"Alert", message:"All fields are required to fill in", preferredStyle:UIAlertControllerStyle.Alert)
             
             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
             
@@ -88,7 +89,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         if(userPassword != userPasswordRepeat)
         {
-            var myAlert = UIAlertController(title:"Alert", message:"Passwords do not match. Please try again", preferredStyle:UIAlertControllerStyle.Alert)
+            let myAlert = UIAlertController(title:"Alert", message:"Passwords do not match. Please try again", preferredStyle:UIAlertControllerStyle.Alert)
             
             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
             
@@ -104,15 +105,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         myUser.username = userName
         myUser.password = userPassword
         myUser.email = userName
-        myUser.setObject(userFirstName, forKey: "first_name")
-        myUser.setObject(userLastName, forKey: "last_name")
+        myUser.setObject(userFirstName!, forKey: "first_name")
+        myUser.setObject(userLastName!, forKey: "last_name")
         
         
-        let profileImageData = UIImageJPEGRepresentation(profilePhotoImageView.image, 1)
+        let profileImageData = UIImageJPEGRepresentation(profilePhotoImageView.image!, 1)
         
         if(profileImageData != nil)
         {
-             let profileImageFile = PFFile(data: profileImageData)
+             let profileImageFile = PFFile(data: profileImageData!)
              myUser.setObject(profileImageFile, forKey: "profile_picture")
         }
         
@@ -123,9 +124,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         spiningActivity.detailsLabelText = "Please wait"
         
         
-        
  
-        myUser.signUpInBackgroundWithBlock { (success:Bool, error:NSError?) -> Void in
+ 
+        myUser.signUpInBackgroundWithBlock { (success, error) -> Void in
            
             // Hide activity indicator
             spiningActivity.hide(true)
@@ -139,7 +140,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             }
             
             
-            var myAlert = UIAlertController(title:"Alert", message:userMessage, preferredStyle:UIAlertControllerStyle.Alert)
+            let myAlert = UIAlertController(title:"Alert", message:userMessage, preferredStyle:UIAlertControllerStyle.Alert)
             
             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default){ action in
             

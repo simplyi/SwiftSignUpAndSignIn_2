@@ -25,7 +25,7 @@ class MainPageViewController: UIViewController {
  
     @IBAction func leftSideButtonTapped(sender: AnyObject) {
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         appDelegate.drawerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
         
@@ -33,7 +33,7 @@ class MainPageViewController: UIViewController {
 
     @IBAction func rightSideButtonTapped(sender: AnyObject) {
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
  
         appDelegate.drawerContainer!.toggleDrawerSide(MMDrawerSide.Right, animated: true, completion: nil)
     }

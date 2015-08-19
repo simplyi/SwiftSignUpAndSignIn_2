@@ -56,7 +56,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
  
     @IBAction func chooseProfileButtonTapped(sender: AnyObject) {
        
-        var myPickerController = UIImagePickerController()
+        let myPickerController = UIImagePickerController()
         myPickerController.delegate = self;
         myPickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         
@@ -64,7 +64,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject])
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])
     {
     profilePictureImageView.image = info[UIImagePickerControllerOriginalImage] as? UIImage
         
@@ -78,13 +78,13 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         let myUser:PFUser = PFUser.currentUser()!
         
         // Get profile image data
-        let profileImageData = UIImageJPEGRepresentation(profilePictureImageView.image, 1)
+        let profileImageData = UIImageJPEGRepresentation(profilePictureImageView.image!, 1)
         
         // Check if all fields are empty
-        if(passwordTextField.text.isEmpty && firstNameTextField.text.isEmpty && lastNameTextField.text.isEmpty && (profileImageData == nil))
+        if(passwordTextField.text!.isEmpty && firstNameTextField.text!.isEmpty && lastNameTextField.text!.isEmpty && (profileImageData == nil))
         {
             
-            var myAlert = UIAlertController(title:"Alert", message:"All fields cannot be empty", preferredStyle: UIAlertControllerStyle.Alert);
+            let myAlert = UIAlertController(title:"Alert", message:"All fields cannot be empty", preferredStyle: UIAlertControllerStyle.Alert);
             
             let okAction =  UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
             myAlert.addAction(okAction);
@@ -93,9 +93,9 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         }
         
         // If user decided to update their password make sure there is no typo
-        if(!passwordTextField.text.isEmpty && (passwordTextField.text != passwordRepeatTextField.text))
+        if(!passwordTextField.text!.isEmpty && (passwordTextField.text != passwordRepeatTextField.text))
         {
-            var myAlert = UIAlertController(title:"Alert", message:"Passwords do not match", preferredStyle: UIAlertControllerStyle.Alert);
+            let myAlert = UIAlertController(title:"Alert", message:"Passwords do not match", preferredStyle: UIAlertControllerStyle.Alert);
             
             let okAction =  UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
             myAlert.addAction(okAction);
@@ -105,10 +105,10 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         }
         
         // Check if First name and Last name are not empty
-        if(firstNameTextField.text.isEmpty || lastNameTextField.text.isEmpty)
+        if(firstNameTextField.text!.isEmpty || lastNameTextField.text!.isEmpty)
         {
             
-            var myAlert = UIAlertController(title:"Alert", message:"First name and Last name are required fields", preferredStyle: UIAlertControllerStyle.Alert);
+            let myAlert = UIAlertController(title:"Alert", message:"First name and Last name are required fields", preferredStyle: UIAlertControllerStyle.Alert);
             
             let okAction =  UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
             myAlert.addAction(okAction);
@@ -121,11 +121,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         let userFirstName = firstNameTextField.text
         let userLastName = lastNameTextField.text
         
-        myUser.setObject(userFirstName, forKey: "first_name")
-        myUser.setObject(userLastName, forKey: "last_name")
+        myUser.setObject(userFirstName!, forKey: "first_name")
+        myUser.setObject(userLastName!, forKey: "last_name")
         
         // set new password
-        if(!passwordTextField.text.isEmpty)
+        if(!passwordTextField.text!.isEmpty)
         {
             let userPassword = passwordTextField.text
             myUser.password = userPassword
@@ -135,7 +135,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         // Set profile picture
         if(profileImageData != nil)
         {
-            let profileFileObject = PFFile(data:profileImageData)
+            let profileFileObject = PFFile(data:profileImageData!)
             myUser.setObject(profileFileObject, forKey: "profile_picture")
         }
         
@@ -143,7 +143,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         loadingNotification.labelText = "Please wait"
         
-        myUser.saveInBackgroundWithBlock { (success:Bool, error:NSError?) -> Void in
+        myUser.saveInBackgroundWithBlock { (success, error) -> Void in
            
             // Hide activity indicator
             loadingNotification.hide(true)
@@ -151,7 +151,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             if(error != nil)
             {
                 
-                var myAlert = UIAlertController(title:"Alert", message:error!.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert);
+                let myAlert = UIAlertController(title:"Alert", message:error!.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert);
                 
                 let okAction =  UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
                 myAlert.addAction(okAction);
@@ -164,8 +164,8 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             if(success)
             {
                 
-                var userMessage = "Profile details successfully updated"
-                var myAlert = UIAlertController(title:"Alert", message:userMessage, preferredStyle: UIAlertControllerStyle.Alert);
+                let userMessage = "Profile details successfully updated"
+                let myAlert = UIAlertController(title:"Alert", message:userMessage, preferredStyle: UIAlertControllerStyle.Alert);
                 
                 let okAction =  UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction!) -> Void in
                     

@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var drawerContainer: MMDrawerController?
-
+ 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -24,19 +24,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.enableLocalDatastore()
         
         // Initialize Parse.
-        Parse.setApplicationId("1PKJb02Dx57AnGrfJboVMNCdZwaXx2iq6X1OtMBc",
-            clientKey: "CepQqiRkM4sykIiEAounCLd1KFDjop9kPSYnzvpH")
+        Parse.setApplicationId("qxRoufTFoKBX7BbCM2Y4c2SBcSrPLM6R8BDoQ0zd",
+            clientKey: "peDM052ghiylsQ5Dl8fCZSjs82hUKTdGAAAtbjDP")
         
-        // [Optional] Track statistics around application opens.
-        //PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         
-       
-       buildUserInterface()
+        PFTwitterUtils.initializeWithConsumerKey("06wiNw8ha9n8K4lF09ytkk5GZ",  consumerSecret:"qrI2jyNooknr3zltjHXhSZmuFuDwvqJC4ENahXYIorBbCnOnqL")
+ 
+        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
+        application.registerUserNotificationSettings(settings)
+        
+        application.registerForRemoteNotifications()
+        
+      
+        buildUserInterface()
       
         
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+    }
+    
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        // Store the deviceToken in the current Installation and save it to Parse
+        let installation = PFInstallation.currentInstallation()
+        installation.setDeviceTokenFromData(deviceToken)
+        installation.saveInBackgroundWithBlock { (success, error) -> Void in
+            print("Registration successful? \(success)")
+        }
+        
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("Failed to register \(error.localizedDescription)")
+    }
+    
+    
+    func application(application: UIApplication,  didReceiveRemoteNotification userInfo: [NSObject : AnyObject],  fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+ 
+        
+        PFPush.handlePush(userInfo)
+        completionHandler(UIBackgroundFetchResult.NewData)
+    }
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -53,6 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+         FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -72,18 +107,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let mainStoryBoard:UIStoryboard = UIStoryboard(name:"Main", bundle:nil)
             
             // Create View Controllers
-            var mainPage:MainPageViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MainPageViewController") as! MainPageViewController
+            let mainPage:MainPageViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MainPageViewController") as! MainPageViewController
             
-            var leftSideMenu:LeftSideViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("LeftSideViewController") as! LeftSideViewController
+            let leftSideMenu:LeftSideViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("LeftSideViewController") as! LeftSideViewController
             
-            var rightSideMenu:RightSideViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("RightSideViewController") as! RightSideViewController
+            let rightSideMenu:RightSideViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("RightSideViewController") as! RightSideViewController
            
             
             
             // Wrap into Navigation controllers
-            var mainPageNav = UINavigationController(rootViewController:mainPage)
-            var leftSideMenuNav = UINavigationController(rootViewController:leftSideMenu)
-            var rightSideMenuNav = UINavigationController(rootViewController:rightSideMenu)
+            let mainPageNav = UINavigationController(rootViewController:mainPage)
+            let leftSideMenuNav = UINavigationController(rootViewController:leftSideMenu)
+            let rightSideMenuNav = UINavigationController(rootViewController:rightSideMenu)
             
             
             drawerContainer = MMDrawerController(centerViewController: mainPageNav, leftDrawerViewController: leftSideMenuNav, rightDrawerViewController: rightSideMenuNav)
