@@ -304,8 +304,8 @@ class ViewController: UIViewController {
             
             do {
             
-            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
-             
+       
+             let json =  try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
                 
                 if let parseJSON = json
                 {
