@@ -109,13 +109,16 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         myUser.setObject(userLastName!, forKey: "last_name")
         
         
-        let profileImageData = UIImageJPEGRepresentation(profilePhotoImageView.image!, 1)
-        
-        if(profileImageData != nil)
+        if let profileImageData = profilePhotoImageView.image
         {
-             let profileImageFile = PFFile(data: profileImageData!)
-             myUser.setObject(profileImageFile, forKey: "profile_picture")
+            let profileImageDataJPEG = UIImageJPEGRepresentation(profileImageData, 1)
+            
+            let profileImageFile = PFFile(data: profileImageDataJPEG!)
+                myUser.setObject(profileImageFile, forKey: "profile_picture")
+            
         }
+        
+  
         
         
         // Show activity indicator
