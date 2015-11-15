@@ -276,8 +276,8 @@ class ViewController: UIViewController {
         var userDetailsUrl:String = "https://api.twitter.com/1.1/users/show.json?screen_name="
         userDetailsUrl = userDetailsUrl + twitterUsername!
 
-        let myUrl = NSURL(string: userDetailsUrl);
-        let request = NSMutableURLRequest(URL:myUrl!);
+        let myUrl = NSURL(string: userDetailsUrl)
+        let request = NSMutableURLRequest(URL:myUrl!)
         request.HTTPMethod = "GET";
         
         pfTwitter!.signRequest(request);

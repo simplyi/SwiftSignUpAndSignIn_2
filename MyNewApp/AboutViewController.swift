@@ -21,6 +21,11 @@ class AboutViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func leftSideButtonTapped(sender: UIBarButtonItem) {
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        appDelegate.drawerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation
