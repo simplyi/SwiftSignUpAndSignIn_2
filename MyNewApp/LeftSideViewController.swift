@@ -16,6 +16,11 @@ class LeftSideViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var menuItems:[String] = ["Main","About","Sign out"]
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        self.navigationController?.view.layoutSubviews()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
